@@ -2,11 +2,10 @@ import { loadEnv } from "./config";
 loadEnv();
 
 import app from "./app";
+import { getBuildStr } from "./utils/misc";
 
-const { APP_NAME, APP_STAGE, APP_VERSION, PORT } = process.env;
+const { PORT } = process.env;
 
 app.listen(PORT, () => {
-  console.log(
-    `${APP_NAME}-${APP_STAGE}@${APP_VERSION} server is running on port ${PORT}!`
-  );
+  console.log(`${getBuildStr()} server is running on port ${PORT}!`);
 });

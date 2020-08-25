@@ -1,14 +1,14 @@
 import Router from "@koa/router";
 import { Context } from "koa";
 
+import { getBuildStr } from "../utils/misc";
+
 const routes = new Router();
 
 routes.get("/", async (ctx: Context) => {
-  const { APP_NAME, APP_STAGE, APP_VERSION } = process.env;
-
   ctx.status = 200;
   ctx.body = {
-    msg: `${APP_NAME}-${APP_STAGE}@${APP_VERSION} server is alive! :)`,
+    msg: `${getBuildStr()} server is alive! :)`,
   };
 });
 
