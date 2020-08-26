@@ -1,11 +1,11 @@
-import Router from "@koa/router";
-import { ParameterizedContext } from "koa";
-import { ContextState } from "../types/koa";
-import { getBuildStr } from "../utils/misc";
+import Router from '@koa/router';
+import { ParameterizedContext } from 'koa';
+import { ContextState } from '../types/koa';
+import { getBuildStr } from '../utils/misc';
 
 const routes = new Router();
 
-routes.get("/", async (ctx: ParameterizedContext<ContextState>) => {
+routes.get('/', (ctx: ParameterizedContext<ContextState>) => {
   ctx.status = 200;
   ctx.body = {
     msg: `${getBuildStr()} server is alive! :)`,

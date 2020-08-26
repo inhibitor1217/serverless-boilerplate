@@ -3,6 +3,7 @@
   "javascript.format.enable": false,
   "editor.tabSize": 2,
   "files.eol": "\n",
+  "eslint.lintTask.enable": true,
   "search.exclude": {
     "**/node_modules": true,
     "**/.serverless": true,

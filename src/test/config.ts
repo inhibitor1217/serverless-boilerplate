@@ -1,10 +1,9 @@
-import { loadEnv } from "../config";
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import chaiAsPromised from 'chai-as-promised';
+import { loadEnv } from '../config';
 
-import chai from "chai";
-import chaiHttp from "chai-http";
-import chaiAsPromised from "chai-as-promised";
-
-export default function () {
+export default function loadTestEnv(): void {
   loadEnv();
 
   chai.use(chaiHttp);

@@ -8,7 +8,7 @@
  * Define table schemas.
  */
 
-export const schemas: { [table_name: string]: string } = {
+export const schemas: { [tableName: string]: string } = {
   // [EXAMPLE_TABLE]: `
   //   CREATE TABLE IF NOT EXISTS ${EXAMPLE_TABLE} (
   //     id CHAR(36) NOT NULL,

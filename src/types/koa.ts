@@ -1,5 +1,5 @@
-import { PoolClient } from "pg";
-import { Logger } from "../utils/logger";
+import { PoolClient } from 'pg';
+import { Logger } from '../utils/logger';
 
 export interface ContextState {
   client: PoolClient;

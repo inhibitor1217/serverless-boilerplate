@@ -1,5 +1,4 @@
-import { APIGatewayProxyHandler } from "aws-lambda";
-import serverless from "serverless-http";
-import app from "./app";
+import serverless from 'serverless-http';
+import app from './app';
 
-export const handler: APIGatewayProxyHandler = serverless(app);
+export const handler = serverless(app);

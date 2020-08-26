@@ -1,19 +1,19 @@
-import { LogLevel } from "../types";
+import { LogLevel } from '../types';
 
 export const parseLogLevel = (level: string): LogLevel => {
-  if (level.toLowerCase().includes("error")) {
+  if (level.toLowerCase().includes('error')) {
     return LogLevel.Error;
   }
-  if (level.toLowerCase().includes("warn")) {
+  if (level.toLowerCase().includes('warn')) {
     return LogLevel.Warning;
   }
-  if (level.toLowerCase().includes("info")) {
+  if (level.toLowerCase().includes('info')) {
     return LogLevel.Info;
   }
-  if (level.toLowerCase().includes("debug")) {
+  if (level.toLowerCase().includes('debug')) {
     return LogLevel.Debug;
   }
-  if (level.toLowerCase().includes("verbose")) {
+  if (level.toLowerCase().includes('verbose')) {
     return LogLevel.Verbose;
   }
 
@@ -32,6 +32,8 @@ const getSeverity = (level: LogLevel): number => {
       return 400;
     case LogLevel.Error:
       return 500;
+    default:
+      return 0;
   }
 };
 
@@ -42,22 +44,32 @@ export class Logger {
     this.severity = getSeverity(level);
   }
 
-  public log(level: LogLevel, message: string | Error) {
+  public log(level: LogLevel, message: string | Error): void {
     if (this.severity <= getSeverity(level)) {
+      // eslint-disable-next-line no-console
       console.log(
-        `[${new Date().toISOString()}] [${level.toString()}] ${message}`
+        `[${new Date().toISOString()}] [${level.toString()}]`,
+        message
       );
       if (message instanceof Error) {
+        // eslint-disable-next-line no-console
         console.log(message.stack);
       }
     }
   }
 
-  public error = (message: string | Error) => this.log(LogLevel.Error, message);
-  public warning = (message: string | Error) =>
+  public error = (message: string | Error): void =>
+    this.log(LogLevel.Error, message);
+
+  public warning = (message: string | Error): void =>
     this.log(LogLevel.Warning, message);
-  public info = (message: string | Error) => this.log(LogLevel.Info, message);
-  public debug = (message: string | Error) => this.log(LogLevel.Debug, message);
-  public verbose = (message: string | Error) =>
+
+  public info = (message: string | Error): void =>
+    this.log(LogLevel.Info, message);
+
+  public debug = (message: string | Error): void =>
+    this.log(LogLevel.Debug, message);
+
+  public verbose = (message: string | Error): void =>
     this.log(LogLevel.Verbose, message);
 }
