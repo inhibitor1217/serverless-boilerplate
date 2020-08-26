@@ -109,6 +109,7 @@ $ source ./init.sh -n APP_NAME
 ```
 
 - This script does several jobs.
+
   - It fills up several environment variables on `.env.local`.
   - It creates role and database on local PostgreSQL server, with name `$APP_NAME-$USER_SUFFIX`.
   - It sets several environment variables, including `PGDATABASE`, `PGUSER`, etc. So, you may connect to your local database server just using:
@@ -117,6 +118,16 @@ $ source ./init.sh -n APP_NAME
 # This command logs in to local server as role $APP_NAME-$USER_SUFFIX.
 $ psql
 ```
+
+- Use other DB management tools (e.g. pgAdmin, MySQL workbench, etc) using the username and password generated on `.env.local` file.
+
+4. **Check if local server is working.**
+
+```
+$ yarn start:local
+```
+
+- Database tables (configured at `src/db/config.ts`) are created lazily on first api request to the local server.
 
 ### IDE Setup
 
