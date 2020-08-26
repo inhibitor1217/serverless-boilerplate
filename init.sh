@@ -48,6 +48,9 @@ sudo -u postgres createuser $DB_NAME -s
 sudo -u postgres createdb $DB_NAME
 sudo -u postgres psql -U postgres -d postgres -c "ALTER USER \"$DB_NAME\" WITH PASSWORD '$DB_PASSWORD';"
 
+printf "\nDB_HOST=localhost" >> $LOCAL_ENV_FILE
+printf "\nDB_USER=$DB_NAME" >> $LOCAL_ENV_FILE
+printf "\nDB_NAME=$DB_NAME" >> $LOCAL_ENV_FILE
 printf "\nDB_PASSWORD=$DB_PASSWORD" >> $LOCAL_ENV_FILE
 
 export PGDATABASE=$DB_NAME
