@@ -69,3 +69,23 @@ $ yarn start:local
 ```
 
 The server is executed with environment `APP_STAGE=local`. Since `--respawn` option is enabled for `ts-node-dev`, any changes within `./src` will restart server automatically. `.env.local` file contains configuration for local development. Feel free to adjust some variables (e.g. dev server port, etc)
+
+## Testing
+
+The test environment uses [`mocha`](https://mochajs.org/) and [`chai`](https://www.chaijs.com/).
+
+### Local testing
+
+To test your server locally, run the server:
+
+```
+$ yarn start:local
+```
+
+Then, at another terminal execute:
+
+```
+$ yarn test:local
+```
+
+This executes every `*.test.ts` files in `src` directory.
