@@ -20,9 +20,11 @@ const db = (): Middleware<ContextState> => {
     }
 
     ctx.state.client = client;
-    return await next();
+    const result = await next();
 
     client.release();
+
+    return result;
   };
 };
 
