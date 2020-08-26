@@ -1,6 +1,6 @@
 # serverless-boilerplate
 
-Boilerplate for backend using serverless, koa.js, typescript, AWS CloudFront, AWS RDS, etc
+Boilerplate for backend using serverless, koa.js, typescript, AWS CloudFormation, AWS RDS, etc
 
 ## Setup
 
@@ -33,7 +33,7 @@ $ yarn
 
 2. **Setup PostgreSQL database locally.**
 
-- Local database will be used on development environment, while deployments to `beta`, `rc`, and `release` environments will use AWS RDS. This boilerplate ensures identical configurations will be applied to both local and AWS RDS.
+- Local database will be used on development environment, while deployments to `beta`, `rc`, and `release` environments will use AWS RDS.
 
 - [Install PostgreSQL locally](https://www.postgresql.org/download/).
   - Ensure that you are installing PostgreSQL of version 12.
@@ -110,7 +110,7 @@ $ source ./init.sh -n APP_NAME
 
 - This script does several jobs.
 
-  - It fills up several environment variables on `.env.local`.
+  - It fills up several environment variables on `.env.local` and `.env.test`.
   - It creates role and database on local PostgreSQL server, with name `$APP_NAME-$USER_SUFFIX`.
   - It sets several environment variables, including `PGDATABASE`, `PGUSER`, etc. So, you may connect to your local database server just using:
 
@@ -151,6 +151,8 @@ The server is executed with environment `APP_STAGE=local`. Since `--respawn` opt
 
 The test environment uses [`mocha`](https://mochajs.org/) and [`chai`](https://www.chaijs.com/).
 
+Test command executes every `*.test.ts` files in `src` directory.
+
 ### Local testing
 
 To test your server locally, run the server:
@@ -165,7 +167,14 @@ Then, at another terminal execute:
 $ yarn test:local
 ```
 
-This executes every `*.test.ts` files in `src` directory.
+### Deployment testing
+
+Test deployed servers on `beta` and `release` stage using:
+
+```
+$ yarn test:beta
+$ yarn test:release
+```
 
 ## Deployment (for project managers)
 
@@ -196,6 +205,8 @@ This password string should be also stored to AWS SSM parameter store, at `/${AP
 
 - Beta stage deployment: `$ yarn deploy:beta`
 - Beta stgae unmount: `$ yarn remove:beta`
+- Release stage deployment: `$ yarn deploy:release`
+- Release stgae unmount: `$ yarn remove:release`
 
 ### Database migartion
 
