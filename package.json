@@ -3,12 +3,18 @@
   "version": "1.0.0",
   "description": "Boilerplate for backend using serverless, koa.js, typescript, AWS RDS, etc",
   "scripts": {
-    "start:local": "APP_STAGE=local npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
-    "test:local": "APP_STAGE=local npx mocha -r ts-node/register ./src/**/*test.ts",
-    "deploy:beta": "APP_STAGE=beta npx serverless deploy",
-    "remove:beta": "APP_STAGE=beta npx serverless remove",
-    "deploy:release": "APP_STAGE=release npx serverless deploy",
-    "remove:release": "APP_STAGE=release npx serverless remove"
+    "debug": "npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
+    "deploy": "npx serverless deploy",
+    "remove": "npx serverless remove",
+    "test": "APP_STAGE=test npx mocha -r ts-node/register ./src/**/*.test.ts",
+    "start:local": "APP_STAGE=local yarn debug",
+    "test:local": "TEST_ENV=local yarn test",
+    "deploy:beta": "APP_STAGE=beta yarn deploy",
+    "remove:beta": "APP_STAGE=beta yarn remove",
+    "test:beta": "TEST_ENV=beta yarn test",
+    "deploy:release": "APP_STAGE=release yarn deploy",
+    "remove:release": "APP_STAGE=release yarn remove",
+    "test:release": "TEST_ENV=release yarn test"
   },
   "repository": {
     "type": "git",

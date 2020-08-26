@@ -2,13 +2,24 @@ import dotenv from "dotenv";
 import path from "path";
 import { SSM } from "aws-sdk";
 
-const { APP_STAGE } = process.env;
-
 export function loadEnv() {
+  const { APP_STAGE, TEST_ENV } = process.env;
+
   if (APP_STAGE === "local") {
     dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
-
-    process.env.HOST = `localhost:${process.env.PORT}`;
+  } else if (APP_STAGE == "beta") {
+  } else if (APP_STAGE == "release") {
+  } else if (APP_STAGE == "test") {
+    dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
+    if (TEST_ENV == "local") {
+      process.env.HOST = `localhost:${process.env.PORT}`;
+    } else if (TEST_ENV == "beta") {
+      // process.env.HOST =
+      //   "https://<api-gateway>.execute-api.ap-northeast-2.amazonaws.com/release/";
+    } else if (TEST_ENV == "release") {
+      // process.env.HOST =
+      //   "https://<api-gateway>.execute-api.ap-northeast-2.amazonaws.com/release/";
+    }
   }
 }
 
