@@ -6,7 +6,9 @@
     "start:local": "APP_STAGE=local npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
     "test:local": "APP_STAGE=local npx mocha -r ts-node/register ./src/**/*test.ts",
     "deploy:beta": "APP_STAGE=beta npx serverless deploy",
-    "remove:beta": "APP_STAGE=beta npx serverless remove"
+    "remove:beta": "APP_STAGE=beta npx serverless remove",
+    "deploy:release": "APP_STAGE=release npx serverless deploy",
+    "remove:release": "APP_STAGE=release npx serverless remove"
   },
   "repository": {
     "type": "git",
