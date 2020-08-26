@@ -9,7 +9,7 @@ const logger = (): Middleware<ContextState> => async (
   const { LOG_LEVEL } = process.env;
   const level = parseLogLevel(LOG_LEVEL ?? "debug");
   ctx.state.logger = new Logger(level);
-  next();
+  return await next();
 };
 
 export default logger;

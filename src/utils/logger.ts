@@ -45,10 +45,11 @@ export class Logger {
   public log(level: LogLevel, message: string | Error) {
     if (this.severity <= getSeverity(level)) {
       console.log(
-        `[${new Date().toISOString()}] [${level.toString()}] ${
-          message instanceof Error ? JSON.stringify(message, null, 2) : message
-        }`
+        `[${new Date().toISOString()}] [${level.toString()}] ${message}`
       );
+      if (message instanceof Error) {
+        console.log(message.stack);
+      }
     }
   }
 
