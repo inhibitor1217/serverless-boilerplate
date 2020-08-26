@@ -5,15 +5,15 @@
   "scripts": {
     "debug": "npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
     "deploy": "npx serverless deploy",
-    "remove": "npx serverless remove",
+    "clear": "npx serverless remove",
     "test": "APP_STAGE=test npx mocha -r ts-node/register ./src/**/*.test.ts",
     "start:local": "APP_STAGE=local yarn debug",
     "test:local": "TEST_ENV=local yarn test",
     "deploy:beta": "APP_STAGE=beta yarn deploy",
-    "remove:beta": "APP_STAGE=beta yarn remove",
+    "remove:beta": "APP_STAGE=beta yarn clear",
     "test:beta": "TEST_ENV=beta yarn test",
     "deploy:release": "APP_STAGE=release yarn deploy",
-    "remove:release": "APP_STAGE=release yarn remove",
+    "remove:release": "APP_STAGE=release yarn clear",
     "test:release": "TEST_ENV=release yarn test"
   },
   "repository": {
