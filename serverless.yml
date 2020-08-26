@@ -1,0 +1,94 @@
+service:
+  name: serverless-boilerplate
+
+custom:
+  stage: ${env:APP_STAGE, 'beta'}
+  version: 0.1.0
+  postgresql:
+    host:
+      Fn::GetAtt: [PostgreSqlRDSInstance, Endpoint.Address]
+    port:
+      Fn::GetAtt: [PostgreSqlRDSInstance, Endpoint.Port]
+  db:
+    name:
+      Fn::Join:
+        - "_"
+        - Fn::Split:
+            - "-"
+            - ${self:service.name}-${env:APP_STAGE, 'beta'}
+    username:
+      Fn::Join:
+        - "_"
+        - Fn::Split:
+            - "-"
+            - ${self:service.name}-${env:APP_STAGE, 'beta'}
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+    packager: yarn
+    excludeFiles: src/**/*.test.ts
+
+provider:
+  name: aws
+  region: ${opt:region, 'ap-northeast-2'}
+  runtime: nodejs12.x
+  stage: ${self:custom.stage}
+  memorySize: 256
+  role: LambdaRole
+  environment:
+    POSTGRESQL_HOST: ${self:custom.postgresql.host}
+    POSTGRESQL_PORT: ${self:custom.postgresql.port}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - ssm:GetParameter
+        - ssm:GetParameters
+        - ssm:GetParametersByPath
+      Resource:
+        - Fn::Join:
+            - ""
+            - - "arn:aws:ssm:"
+              - Ref: AWS::Region
+              - ":"
+              - Ref: AWS::AccountId
+              - ":parameter/${self:service.name}-${self:custom.stage}"
+
+resources:
+  Resources:
+    LambdaRole: ${file(./resource/LambdaRole.yml)}
+    ServerlessInternetGateway: ${file(./resource/ServerlessInternetGateway.yml)}
+    ServerlessVPC: ${file(./resource/ServerlessVPC.yml)}
+    ServerlessVPCGA: ${file(./resource/ServerlessVPCGA.yml)}
+    ServerlessSubnetA: ${file(./resource/ServerlessSubnetA.yml)}
+    ServerlessSubnetB: ${file(./resource/ServerlessSubnetB.yml)}
+    ServerlessSubnetC: ${file(./resource/ServerlessSubnetC.yml)}
+    ServerlessSubnetGroup: ${file(./resource/ServerlessSubnetGroup.yml)}
+    ServerlessSecurityGroup: ${file(./resource/ServerlessSecurityGroup.yml)}
+    RouteTablePublic: ${file(./resource/RouteTablePublic.yml)}
+    RoutePublic: ${file(./resource/RoutePublic.yml)}
+    RouteTableAssociationSubnetA: ${file(./resource/RouteTableAssociationSubnetA.yml)}
+    RouteTableAssociationSubnetB: ${file(./resource/RouteTableAssociationSubnetB.yml)}
+    RouteTableAssociationSubnetC: ${file(./resource/RouteTableAssociationSubnetC.yml)}
+    PostgreSqlRDSInstance: ${file(./resource/PostgreSqlRDSInstance.yml)}
+
+plugins:
+  - serverless-webpack
+  - serverless-pseudo-parameters
+
+functions:
+  app:
+    handler: src/serverless.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors: true
+      - http:
+          path: /{any+}
+          method: ANY
+          cors: true
+    environment:
+      APP_NAME: ${self:service.name}
+      APP_VERSION: ${self:custom.version}
+      APP_STAGE: ${env:APP_STAGE}
+      LOG_LEVEL: info

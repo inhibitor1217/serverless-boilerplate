@@ -1,0 +1,14 @@
+DependsOn: ServerlessVPCGA
+Type: AWS::RDS::DBInstance
+Properties:
+  MasterUsername: ${self:custom.db.username}
+  MasterUserPassword: ${ssm:/${self:service.name}-${env:APP_STAGE, 'beta'}/rds_password}
+  AllocatedStorage: 20
+  DBName: ${self:custom.db.name}
+  DBInstanceClass: db.t2.micro
+  VPCSecurityGroups:
+    - !GetAtt ServerlessSecurityGroup.GroupId
+  DBSubnetGroupName:
+    Ref: ServerlessSubnetGroup
+  Engine: postgres
+  PubliclyAccessible: true

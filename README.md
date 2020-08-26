@@ -4,7 +4,7 @@ Boilerplate for backend using serverless, koa.js, typescript, AWS CloudFront, AW
 
 ## Setup
 
-### Environment setup
+### Environment setup (for developers)
 
 1. **Setup Node.js and node packages.**
 
@@ -100,10 +100,10 @@ $ chmod 744 ./init.sh
 $ source ./init.sh -h
 init.sh [-h] [-n APP_NAME] [-u USER_SUFFIX] -- initialize serverless-boilerplate project with custom settings
 
-where:
+options:
     -h    shows this help text
-    -n    sets APP_NAME, which is applied to app environment
-    -u    sets USER_SUFFIX, which is applied to postgresql role and database name
+    -n    sets APP_NAME, which is applied to app environment (default is "serverless-boilerplate")
+    -u    sets USER_SUFFIX, which is applied to postgresql role and database name (default is $USER)
 
 $ source ./init.sh -n APP_NAME
 ```
@@ -166,3 +166,25 @@ $ yarn test:local
 ```
 
 This executes every `*.test.ts` files in `src` directory.
+
+## Deployment (for project managers)
+
+On devops script, configure `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables from your AWS IAM user. The devops IAM user should have `AdministratorAccess` granted to deploy resources.
+
+### Storing parameters and secret keys
+
+Navigate to [AWS SSM](https://ap-northeast-2.console.aws.amazon.com/systems-manager/home) (Systems Manager). We will use SSM to store secret parameters (database master password, jwt signing key, etc). At [Parameter Store](https://ap-northeast-2.console.aws.amazon.com/systems-manager/parameters), create parameters:
+
+- `/${APP_NAME}-${APP_STAGE}/rds_password`
+
+You may set any arbitrary string to those parameters. However, you should securely store those parameters and do not distribute on public. (For example, you may need database master password to handle DB migration, etc)
+
+### Commands
+
+- Beta stage deployment: `$ yarn deploy:beta`
+- Beta stgae unmount: `$ yarn remove:beta`
+
+### Database migartion
+
+- **You should execute migration scripts on AWS deployments manually.** The schema configuration at `src/db/config.ts` only updates your local PostgreSQL server.
+- Drop old tables on local database to migrate into new schema.

@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Boilerplate for backend using serverless, koa.js, typescript, AWS RDS, etc",
   "scripts": {
-    "start:local": "APP_STAGE=local npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/index.ts",
-    "test:local": "APP_STAGE=local npx mocha -r ts-node/register ./src/**/*test.ts"
+    "start:local": "APP_STAGE=local npx ts-node-dev --respawn --transpile-only --ignore-watch node_modules ./src/server.ts",
+    "test:local": "APP_STAGE=local npx mocha -r ts-node/register ./src/**/*test.ts",
+    "deploy:beta": "APP_STAGE=beta npx serverless deploy",
+    "remove:beta": "APP_STAGE=beta npx serverless remove"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
     "chai-http": "^4.3.0",
     "mocha": "^8.1.1",
     "serverless": "^1.79.0",
+    "serverless-pseudo-parameters": "^2.5.0",
     "serverless-webpack": "^5.3.4",
     "ts-loader": "^8.0.3",
     "ts-node": "^9.0.0",
@@ -38,10 +41,12 @@
     "@koa/router": "^9.4.0",
     "@types/koa-logger": "^3.1.1",
     "@types/koa__router": "^8.0.2",
+    "aws-sdk": "^2.739.0",
     "dotenv": "^8.2.0",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-logger": "^3.2.1",
-    "pg": "^8.3.2"
+    "pg": "^8.3.2",
+    "serverless-http": "^2.5.0"
   }
 }

@@ -3,6 +3,7 @@
 APP_NAME=serverless-boilerplate
 USER_SUFFIX=$USER
 LOCAL_ENV_FILE=.env.local
+SERVERLESS_CONFIG_FILE=serverless.yml
 
 USAGE="$(basename "$0") [-h] [-n APP_NAME] [-u USER_SUFFIX] -- initialize serverless-boilerplate project with custom settings
 
@@ -30,6 +31,7 @@ done
 # Update APP_NAME on local environment configuration file.
 
 sed -i "/APP_NAME/c\APP_NAME=$APP_NAME" $LOCAL_ENV_FILE
+sed -i "/name: serverless-boilerplate/c\  name: $APP_NAME" $SERVERLESS_CONFIG_FILE
 
 echo ""
 echo "APP_NAME: $APP_NAME"
