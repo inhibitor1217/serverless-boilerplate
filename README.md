@@ -1,55 +1,121 @@
 # serverless-boilerplate
 
-Boilerplate for backend using serverless, koa.js, typescript, AWS RDS, etc
+Boilerplate for backend using serverless, koa.js, typescript, AWS CloudFront, AWS RDS, etc
 
 ## Setup
 
 ### Environment setup
 
-1. Install [Node.js](https://nodejs.org/en/download/).
+1. **Setup Node.js and node packages.**
 
-- Ensure that you are using the latest version of node (12.x).
+- Install [Node.js](https://nodejs.org/en/download/).
+  - Use node version manager ([nvm](https://github.com/nvm-sh/nvm)) if necessary.
 
 ```
+# Ensure that you are using the latest version of node (12.x).
 $ node --version
 v12.xx.xx
 ```
 
-- Use node version manager ([nvm](https://github.com/nvm-sh/nvm)) if necessary.
-
-2. Install [yarn](https://classic.yarnpkg.com/en/docs/install), a package manager for node.
-
-- Check if yarn is successfully installed.
+- Install [yarn](https://classic.yarnpkg.com/en/docs/install), a package manager for node
 
 ```
+# Check if yarn is successfully installed.
 $ yarn --version
-1.22.4  // or over
+1.22.4  # or over
 ```
 
-3. Install dependencies.
+- Install node.js package dependencies.
 
 ```
 $ yarn
 ```
 
-4. Grant `init.sh` execution permission.
+2. **Setup PostgreSQL database locally.**
+
+- Local database will be used on development environment, while deployments to `beta`, `rc`, and `release` environments will use AWS RDS. This boilerplate ensures identical configurations will be applied to both local and AWS RDS.
+
+- [Install PostgreSQL locally](https://www.postgresql.org/download/).
+  - Ensure that you are installing PostgreSQL of version 12.
+  - On ubuntu, you many need to clear any existing `postgresql` packages.
 
 ```
-// cwd is project root directory
+# list installed postgresql packages
+$ dkpg -l | grep postgres
+
+# remove any installed postgresql packages
+$ dpkg -l | grep postgres | cut -d' ' -f3 | xargs sudo apt --purge remove -y
+
+# Create the file repository configuration:
+$ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+# Import the repository signing key:
+$ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+# Update the package lists:
+$ sudo apt-get update
+
+# Install the PostgreSQL of version 12.
+$ sudo apt-get -y install postgresql-12
+
+# Check if postgres is successfully installed.
+$ sudo service postgresql restart
+$ sudo -u postgres psql
+psql (12.4 (Ubuntu 12.4-1.pgdg18.04+1))
+Type "help" for help.
+
+postgres=#
+```
+
+- You may need to configure PostgreSQL settings, if `FATAL: Peer authentication failed for user` occurs while logging in as user created by `init.sh`.
+
+```
+# Open the configuration file:
+$ sudo vi /etc/postgresql/12/main/pg_hba.conf
+
+# Then, replace the line
+
+local   all             all                                     peer
+
+# to
+
+local   all             all                                     md5
+
+# Save the file and restart the server.
+$ sudo service postgresql restart
+```
+
+3. **Execute initialization script.**
+
+- Grant `init.sh` execution permission.
+
+```
+# cwd is project root directory
 $ chmod 744 ./init.sh
 ```
 
-5. Execute `init.sh`, with arguments according to your own project.
+- Execute `init.sh`, with arguments according to your own project.
 
 ```
-$ ./init.sh -h
-init.sh [-h] [-n APP_NAME] -- initialize serverless-boilerplate project with custom settings
+$ source ./init.sh -h
+init.sh [-h] [-n APP_NAME] [-u USER_SUFFIX] -- initialize serverless-boilerplate project with custom settings
 
 where:
     -h    shows this help text
     -n    sets APP_NAME, which is applied to app environment
+    -u    sets USER_SUFFIX, which is applied to postgresql role and database name
 
-$ ./init.sh -n APP_NAME
+$ source ./init.sh -n APP_NAME
+```
+
+- This script does several jobs.
+  - It fills up several environment variables on `.env.local`.
+  - It creates role and database on local PostgreSQL server, with name `$APP_NAME-$USER_SUFFIX`.
+  - It sets several environment variables, including `PGDATABASE`, `PGUSER`, etc. So, you may connect to your local database server just using:
+
+```
+# This command logs in to local server as role $APP_NAME-$USER_SUFFIX.
+$ psql
 ```
 
 ### IDE Setup
