@@ -176,8 +176,21 @@ On devops script, configure `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` envi
 Navigate to [AWS SSM](https://ap-northeast-2.console.aws.amazon.com/systems-manager/home) (Systems Manager). We will use SSM to store secret parameters (database master password, jwt signing key, etc). At [Parameter Store](https://ap-northeast-2.console.aws.amazon.com/systems-manager/parameters), create parameters:
 
 - `/${APP_NAME}-${APP_STAGE}/rds_password`
+- `/${APP_NAME}-${APP_STAGE}/lambda_rds_password`
 
 You may set any arbitrary string to those parameters. However, you should securely store those parameters and do not distribute on public. (For example, you may need database master password to handle DB migration, etc)
+
+### Database lambda role configuration
+
+After deploying the application, you should create PostgreSQL role that lambda function will use when connecting to database.
+
+Connect to the created database, then execute:
+
+```
+CREATE ROLE lambda WITH LOGIN ENCRYPTED PASSWORD '<lambda_rds_password>';
+```
+
+This password string should be also stored to AWS SSM parameter store, at `/${APP_NAME}-${APP_STAGE}/lambda_rds_password`.
 
 ### Commands
 

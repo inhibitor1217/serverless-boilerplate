@@ -1,15 +1,15 @@
 import { Middleware, Next, ParameterizedContext } from "koa";
 import { PoolClient } from "pg";
-import pool from "../db";
+import db from "../db";
 import { ContextState } from "../types/koa";
 import { schemas } from "../db/config";
 
-const db = (): Middleware<ContextState> => {
+const dbMiddleware = (): Middleware<ContextState> => {
   let localDatabaseInitialized = false;
   const { APP_STAGE } = process.env;
 
   return async (ctx: ParameterizedContext<ContextState>, next: Next) => {
-    const client: PoolClient = await pool.connect();
+    const client: PoolClient = await db().then((pool) => pool.connect());
 
     if (APP_STAGE === "local" && !localDatabaseInitialized) {
       localDatabaseInitialized = true;
@@ -28,4 +28,4 @@ const db = (): Middleware<ContextState> => {
   };
 };
 
-export default db;
+export default dbMiddleware;
