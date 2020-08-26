@@ -1,7 +1,7 @@
 import { Middleware, Next, ParameterizedContext } from "koa";
 import { PoolClient } from "pg";
 import pool from "../db";
-import { ContextState } from ".";
+import { ContextState } from "../types/koa";
 
 const db: Middleware<ContextState> = async (
   ctx: ParameterizedContext<ContextState>,
