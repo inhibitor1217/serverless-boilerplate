@@ -14,7 +14,7 @@ options:
     -u    sets USER_SUFFIX, which is applied to postgresql role and database name (default is \$USER)
 "
 
-while getopts :hn: opt
+while getopts :hnu: opt
 do
   case ${opt} in
     h) echo "$USAGE"
