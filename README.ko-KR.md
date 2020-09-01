@@ -41,7 +41,7 @@ $ yarn
 
 ```
 # 설치된 postgresql 패키지를 확인합니다.
-$ dkpg -l | grep postgres
+$ dpkg -l | grep postgres
 
 # 설치된 모든 postgresql 관련 패키지를 제거합니다.
 $ dpkg -l | grep postgres | cut -d' ' -f3 | xargs sudo apt --purge remove -y

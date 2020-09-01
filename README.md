@@ -41,7 +41,7 @@ $ yarn
 
 ```
 # list installed postgresql packages
-$ dkpg -l | grep postgres
+$ dpkg -l | grep postgres
 
 # remove any installed postgresql packages
 $ dpkg -l | grep postgres | cut -d' ' -f3 | xargs sudo apt --purge remove -y
